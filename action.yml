@@ -20,6 +20,10 @@ inputs:
     description: 'The password of the account that you want to impersonate.'
     required: true
     default: ''
+  LCSEnvironmentID: 
+    description: 'The unique id of the environment that you want to work against'
+    required: true
+    default: ''
   LCSFileAssetID: 
     description: 'The asset ID of the software deployable package to deploy.'
     required: true
@@ -31,5 +35,5 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: $Asset = ${{ github.action_path }}/LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
+    - run: $Asset = ${{ github.action_path }}/LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
       shell: powershell
