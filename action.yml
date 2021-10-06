@@ -1,0 +1,35 @@
+name: 'D365FO Asset Deployment'
+description: 'Deploy a software deployable package from an LCS projects Asset Library to a non-production environment.'
+branding:
+  icon: 'award'  
+  color: 'blue'
+inputs:
+  ProjectId: 
+    description: 'The project id for the Dynamics 365 for Finance & Operations project inside LCS.'
+    required: true
+    default: '123456'
+  ClientId: 
+    description: 'The Azure Registered Application Id / Client Id obtained while creating a Registered App inside the Azure Portal.'
+    required: true
+    default: ''
+  Username: 
+    description: 'The username of the account that you want to impersonate.'
+    required: true
+    default: ''
+  Password: 
+    description: 'The password of the account that you want to impersonate.'
+    required: true
+    default: ''
+  LCSFileAssetID: 
+    description: 'The asset ID of the software deployable package to deploy.'
+    required: true
+    default: ''
+  UpdateName: 
+    description: 'Enter the name that is shown for the update in the environment history in LCS.'
+    required: true
+    default: ''
+runs:
+  using: "composite"
+  steps:
+  - shell: powershell
+    run: $Asset = ${{ github.action_path }}/LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
