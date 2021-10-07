@@ -35,7 +35,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - shell: powershell
+      run: |
         cd ${{ github.action_path }}; 
         $Asset = ./LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
       
