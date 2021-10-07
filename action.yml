@@ -38,7 +38,6 @@ runs:
     - shell: powershell
       run: |
         cd ${{ github.action_path }}; 
-        set-ExecutionPolicy Unrestricted
         function Get-PSPlatform
         {
             return [System.Environment]::OSVersion.Platform
