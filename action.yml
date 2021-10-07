@@ -38,5 +38,19 @@ runs:
     - shell: powershell
       run: |
         cd ${{ github.action_path }}; 
-        $Asset = ./LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
-      
+        set-ExecutionPolicy Unrestricted
+        function Get-PSPlatform
+        {
+            return [System.Environment]::OSVersion.Platform
+        }
+        switch (Get-PSPlatform)
+        {
+            'Win32NT' { 
+               $Asset = ./LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
+             }
+             default { 
+              
+                $Asset = ./LcsAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
+             }
+        }
+
