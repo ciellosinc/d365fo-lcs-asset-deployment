@@ -15,11 +15,11 @@ if( -not ((Get-PackageProvider -Name nuget).Name -eq 'NuGet'))
 {
     Install-PackageProvider nuget -Scope CurrentUser -Force -Confirm:$false
 }
-if( -not ((Get-InstalledModule -Name AZ).Name -eq 'Az'))
+if( -not ((Find-Module  -Name AZ).Name -eq 'Az'))
 {
     Install-Module -Name AZ -AllowClobber -Scope CurrentUser -Force -Confirm:$False -SkipPublisherCheck
 }
-if( -not ((Get-InstalledModule -Name d365fo.tools).Name -eq 'd365fo.tools'))
+if( -not ((Find-Module -Name d365fo.tools).Name -eq 'd365fo.tools'))
 {
     Install-Module -Name d365fo.tools -AllowClobber -Scope CurrentUser -Force -Confirm:$false
 }
