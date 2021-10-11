@@ -25,7 +25,7 @@ if( -not ((Find-Module -Name d365fo.tools).Name -eq 'd365fo.tools'))
 }
 else
 {
-     Import-Module -Name d365fo.tools -Force -Confirm:$false
+     Import-Module -Name d365fo.tools -Force
 }
 Get-D365LcsApiToken -ClientId $ClientId -Username $Username -Password $Password -LcsApiUri "https://lcsapi.lcs.dynamics.com" -Verbose | Set-D365LcsApiConfig -ProjectId $ProjectId
 $PSFObject = Invoke-D365LcsDeployment -AssetId $LCSFileAssetID -EnvironmentId $LCSEnvironmentID -UpdateName $UpdateName
