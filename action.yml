@@ -37,5 +37,5 @@ runs:
   steps:
     - shell: powershell
       run: |
-         $Asset = ${{ github.action_path }}\LCSAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}"
+         $Asset = ${{ github.action_path }}\LCSAssetDeployment.ps1 -ProjectId ${{ inputs.ProjectId }} -ClientId ${{ inputs.ClientId }}  -Username "${{ inputs.Username }}" -Password "${{ inputs.Password }}" -LCSEnvironmentID "${{ inputs.LCSEnvironmentID }}" -LCSFileAssetID "${{ inputs.LCSFileAssetID }}" -UpdateName "${{ inputs.UpdateName }}" -WaitForCompletion
 
