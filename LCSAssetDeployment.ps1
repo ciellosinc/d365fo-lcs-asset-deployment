@@ -33,10 +33,10 @@ Get-D365LcsApiToken -ClientId $ClientId -Username $Username -Password $Password 
 $PSFObject = Invoke-D365LcsDeployment -AssetId $LCSFileAssetID -EnvironmentId $LCSEnvironmentID -UpdateName $UpdateName
 
 do {
-    Start-Sleep -Seconds 30
-    $deploymentStatus = Get-D365LcsDeploymentStatus -ActivityId $PSFObject.ActivityId -EnvironmentId $LCSEnvironmentID -FailOnErrorMessage -EnableException -SleepInSeconds 5
+    Start-Sleep -Seconds 10
+    $deploymentStatus = Get-D365LcsDeploymentStatus -ActivityId $PSFObject.ActivityId -EnvironmentId $LCSEnvironmentID -FailOnErrorMessage -SleepInSeconds 5
 
-    if ($FailOnErrorMessage -and $deploymentStatus.ErrorMessage) {
+    if ($deploymentStatus.ErrorMessage) {
         $messageString = "The request against LCS succeeded, but the response was an error message for the operation: <c='em'>$($deploymentStatus.ErrorMessage)</c>."
         $errorMessagePayload = "`r`n$($deploymentStatus | ConvertTo-Json)"
 
@@ -44,4 +44,3 @@ do {
     Write-Host $deploymentStatus.OperationStatus, $deploymentStatus.CompletionDate
 }
 while ((($deploymentStatus.OperationStatus -eq "InProgress") -or ($deploymentStatus.OperationStatus -eq "NotStarted") -or ($deploymentStatus.OperationStatus -eq "PreparingEnvironment")) -and $WaitForCompletion)
-
