@@ -8,7 +8,8 @@
         $ProjectId,
         [string]$LCSEnvironmentID,
         [string]$LCSFileAssetID,
-        [string]$UpdateName)
+        [string]$UpdateName,
+        [switch]$WaitForCompletion)
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 #Check Modules installed
 $NuGet = Get-PackageProvider -Name nuget -ErrorAction SilentlyContinue
@@ -28,6 +29,19 @@ if([string]::IsNullOrEmpty($DfoTools))
     Install-Module -Name d365fo.tools -AllowClobber -Scope CurrentUser -Force -Confirm:$false
 }
 
-Get-D365LcsApiToken -ClientId $ClientId -Username $Username -Password $Password -LcsApiUri "https://lcsapi.lcs.dynamics.com" -Verbose | Set-D365LcsApiConfig -ProjectId $ProjectId
-$PSFObject = Invoke-D365LcsDeployment -AssetId $LCSFileAssetID -EnvironmentId $LCSEnvironmentID -UpdateName $UpdateName -Verbose
-Get-D365LcsDeploymentStatus -ActivityId $PSFObject.ActivityId -EnvironmentId $LCSEnvironmentID -FailOnErrorMessage $True  -EnableException $True -WaitForCompletion -Verbose
+Get-D365LcsApiToken -ClientId $ClientId -Username $Username -Password $Password -LcsApiUri "https://lcsapi.lcs.dynamics.com" | Set-D365LcsApiConfig -ProjectId $ProjectId
+$PSFObject = Invoke-D365LcsDeployment -AssetId $LCSFileAssetID -EnvironmentId $LCSEnvironmentID -UpdateName $UpdateName
+
+do {
+    Start-Sleep -Seconds 30
+    $deploymentStatus = Get-D365LcsDeploymentStatus -ActivityId $PSFObject.ActivityId -EnvironmentId $LCSEnvironmentID -FailOnErrorMessage -EnableException -SleepInSeconds 5
+
+    if ($FailOnErrorMessage -and $deploymentStatus.ErrorMessage) {
+        $messageString = "The request against LCS succeeded, but the response was an error message for the operation: <c='em'>$($deploymentStatus.ErrorMessage)</c>."
+        $errorMessagePayload = "`r`n$($deploymentStatus | ConvertTo-Json)"
+
+    }
+    Write-Host $deploymentStatus.OperationStatus, $deploymentStatus.CompletionDate
+}
+while ((($deploymentStatus.OperationStatus -eq "InProgress") -or ($deploymentStatus.OperationStatus -eq "NotStarted") -or ($deploymentStatus.OperationStatus -eq "PreparingEnvironment")) -and $WaitForCompletion)
+
