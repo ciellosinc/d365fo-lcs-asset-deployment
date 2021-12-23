@@ -39,7 +39,7 @@ do {
     if ($deploymentStatus.ErrorMessage) {
         $messageString = "The request against LCS succeeded, but the response was an error message for the operation: <c='em'>$($deploymentStatus.ErrorMessage)</c>."
         $errorMessagePayload = "`r`n$($deploymentStatus | ConvertTo-Json)"
-
+        Write-Error $errorMessagePayload
     }
     Write-Host $deploymentStatus.OperationStatus, $deploymentStatus.CompletionDate
 }
