@@ -36,7 +36,7 @@ do {
     Start-Sleep -Seconds 10
     $deploymentStatus = Get-D365LcsDeploymentStatus -ActivityId $PSFObject.ActivityId -EnvironmentId $LCSEnvironmentID -FailOnErrorMessage -SleepInSeconds 5
 
-    if ($deploymentStatus.ErrorMessage) {
+    if (($deploymentStatus.ErrorMessage) -or ($deploymentStatus.OperationStatus -eq "PreparationFailed")) {
         $messageString = "The request against LCS succeeded, but the response was an error message for the operation: <c='em'>$($deploymentStatus.ErrorMessage)</c>."
         $errorMessagePayload = "`r`n$($deploymentStatus | ConvertTo-Json)"
         Write-Error $errorMessagePayload
